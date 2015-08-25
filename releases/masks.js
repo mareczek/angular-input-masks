@@ -2205,7 +2205,11 @@ if (objectTypes[typeof module]) {
 				});
 
 				ctrl.$formatters.push(applyPlPeselMask);
-				ctrl.$validators.uiPlPostalCode = function(value) {
+
+				ctrl.$validators.uiPlPesel = function(value) {
+					if (!value)
+						return true;
+
 					var valid = false;
 
 					if (value && value.length === 11) {
