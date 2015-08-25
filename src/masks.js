@@ -1181,6 +1181,9 @@ if (objectTypes[typeof module]) {
         ctrl.$formatters.push(applyPlPassportNoMask);
 
 				ctrl.$validators.uiPlPassportNo = function(value) {
+					if (!value)
+						return value;
+
  					if (writeToModelPrematurely)
             ctrl.$modelValue = value;
 
@@ -1262,7 +1265,11 @@ if (objectTypes[typeof module]) {
 				ctrl.$formatters.push(applyPlIdNoMask);
 
 				ctrl.$validators.uiPlIdNo = function(value){
+					if (!value)
+						return value;
+
 					var valid = false;
+
 					if (value.length === 9) {
 						var digs = (''+value).split('');
         		var controlSum = (
