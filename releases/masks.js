@@ -2016,7 +2016,7 @@ if (objectTypes[typeof module]) {
 
 				ctrl.$validators.uiPlPassportNo = function(value) {
 					if (!value)
-						return value;
+						return true;
 
  					if (writeToModelPrematurely)
             ctrl.$modelValue = value;
@@ -2100,7 +2100,7 @@ if (objectTypes[typeof module]) {
 
 				ctrl.$validators.uiPlIdNo = function(value){
 					if (!value)
-						return value;
+						return true;
 
 					var valid = false;
 
