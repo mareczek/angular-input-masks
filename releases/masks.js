@@ -195,7 +195,6 @@ if (objectTypes[typeof module]) {
 /**
  * br-validations
  * A library of validations applicable to several Brazilian data like I.E., CNPJ, CPF and others
-<<<<<<< HEAD
  * @version v0.2.4
  * @link http://github.com/the-darc/br-validations
  * @license MIT
@@ -214,14 +213,6 @@ if (objectTypes[typeof module]) {
 		root.BrV = factory();
 	}
 }(this, function () {
-=======
- * @version v0.2.2
- * @link http://github.com/the-darc/br-validations
- * @license MIT
- */
-(function () {
-  var root = this;
->>>>>>> 54f615c771b2a8d579f3e17363faffcee1fef737
 var CNPJ = {};
 
 CNPJ.validate = function(c) {
@@ -838,30 +829,12 @@ IErules.AP = [{
 	validate: function(value) { return validateIE(value, this); }
 }];
 
-<<<<<<< HEAD
 	return {
 		ie: IE,
 		cpf: CPF,
 		cnpj: CNPJ
 	};
 }));
-=======
-var BrV = {
-   ie: IE,
-   cpf: CPF,
-   cnpj: CNPJ
-};
-var objectTypes = {
-	'function': true,
-	'object': true
-};
-if (objectTypes[typeof module]) {
-	module.exports = BrV;	
-} else {
-	root.BrV = BrV;
-}
-}.call(this));
->>>>>>> 54f615c771b2a8d579f3e17363faffcee1fef737
 /**
  * angular-mask
  * Personalized input masks for AngularJS
@@ -2002,6 +1975,9 @@ if (objectTypes[typeof module]) {
 				ctrl.$formatters.push(applyPlBankAccountNoMask);
 
 				ctrl.$validators.uiPlBankAccountNo = function(value) {
+					if (!value)
+						return true;
+
 					var valid = false;
 					if (value && value.length === 26) {
 						var tempValue = value;
@@ -2045,12 +2021,9 @@ if (objectTypes[typeof module]) {
         ctrl.$formatters.push(applyPlPassportNoMask);
 
 				ctrl.$validators.uiPlPassportNo = function(value) {
-<<<<<<< HEAD
-=======
 					if (!value)
 						return true;
 
->>>>>>> 54f615c771b2a8d579f3e17363faffcee1fef737
  					if (writeToModelPrematurely)
             ctrl.$modelValue = value;
 
@@ -2130,11 +2103,7 @@ if (objectTypes[typeof module]) {
 				});
 
 				ctrl.$formatters.push(applyPlIdNoMask);
-<<<<<<< HEAD
 
-				ctrl.$validators.uiPlIdNo = function(value){
-					var valid = false;
-=======
 
 				ctrl.$validators.uiPlIdNo = function(value){
 					if (!value)
@@ -2142,7 +2111,6 @@ if (objectTypes[typeof module]) {
 
 					var valid = false;
 
->>>>>>> 54f615c771b2a8d579f3e17363faffcee1fef737
 					if (value.length === 9) {
 						var digs = (''+value).split('');
         		var controlSum = (
@@ -2187,6 +2155,9 @@ if (objectTypes[typeof module]) {
 				ctrl.$formatters.push(applyPlPostalCodeMask);
 
 				ctrl.$validators.uiPlPostalCode = function(modelValue) {
+					if (!modelValue)
+						return true;
+
 					if (writeToModelPrematurely)
 						ctrl.$modelValue = modelValue;
 					return !modelValue || modelValue.length === 5;
@@ -2244,15 +2215,12 @@ if (objectTypes[typeof module]) {
 				});
 
 				ctrl.$formatters.push(applyPlPeselMask);
-<<<<<<< HEAD
-				ctrl.$validators.uiPlPostalCode = function(value) {
-=======
+
 
 				ctrl.$validators.uiPlPesel = function(value) {
 					if (!value)
 						return true;
 
->>>>>>> 54f615c771b2a8d579f3e17363faffcee1fef737
 					var valid = false;
 
 					if (value && value.length === 11) {
@@ -2299,6 +2267,9 @@ if (objectTypes[typeof module]) {
 				ctrl.$formatters.push(applyPlNipMask);
 
 				ctrl.$validators.uiPlNip = function (modelValue) {
+					if (!modelValue)
+						return true;
+
 					var valid = false;
 					if (modelValue && modelValue.length === 10) {
 						var dig = (''+modelValue).split('');
@@ -2368,6 +2339,9 @@ if (objectTypes[typeof module]) {
 				ctrl.$formatters.push(applyPlRegonMask);
 
 				ctrl.$validators.uiPlRegon = function(value) {
+					if (!value)
+						return true;
+
 					var valid = false;
 					var dig = null;
 					var controlSum = null;
@@ -2452,6 +2426,9 @@ if (objectTypes[typeof module]) {
 				ctrl.$formatters.push(applyPlMedicalNoMask);
 
 				ctrl.$validators.uiPlMedicalNo = function(value) {
+					if (!value)
+						return true;
+
 					var valid = false;
 					if (value){
 						var dig = (''+value).split('');
@@ -2774,6 +2751,7 @@ if (objectTypes[typeof module]) {
 					if (!value) {
 						return value;
 					}
+
 
 					var actualNumber = value.replace(/[^\d]+/g,'');
 					actualNumber = actualNumber.replace(/^[0]+([1-9])/,'$1');

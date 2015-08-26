@@ -1138,6 +1138,9 @@ if (objectTypes[typeof module]) {
 				ctrl.$formatters.push(applyPlBankAccountNoMask);
 
 				ctrl.$validators.uiPlBankAccountNo = function(value) {
+					if (!value)
+						return true;
+
 					var valid = false;
 					if (value && value.length === 26) {
 						var tempValue = value;
@@ -1315,6 +1318,9 @@ if (objectTypes[typeof module]) {
 				ctrl.$formatters.push(applyPlPostalCodeMask);
 
 				ctrl.$validators.uiPlPostalCode = function(modelValue) {
+					if (!modelValue)
+						return true;
+
 					if (writeToModelPrematurely)
 						ctrl.$modelValue = modelValue;
 					return !modelValue || modelValue.length === 5;
@@ -1424,6 +1430,9 @@ if (objectTypes[typeof module]) {
 				ctrl.$formatters.push(applyPlNipMask);
 
 				ctrl.$validators.uiPlNip = function (modelValue) {
+					if (!modelValue)
+						return true;
+
 					var valid = false;
 					if (modelValue && modelValue.length === 10) {
 						var dig = (''+modelValue).split('');
@@ -1493,6 +1502,9 @@ if (objectTypes[typeof module]) {
 				ctrl.$formatters.push(applyPlRegonMask);
 
 				ctrl.$validators.uiPlRegon = function(value) {
+					if (!value)
+						return true;
+
 					var valid = false;
 					var dig = null;
 					var controlSum = null;
@@ -1577,6 +1589,9 @@ if (objectTypes[typeof module]) {
 				ctrl.$formatters.push(applyPlMedicalNoMask);
 
 				ctrl.$validators.uiPlMedicalNo = function(value) {
+					if (!value)
+						return true;
+
 					var valid = false;
 					if (value){
 						var dig = (''+value).split('');
@@ -1899,6 +1914,7 @@ if (objectTypes[typeof module]) {
 					if (!value) {
 						return value;
 					}
+
 
 					var actualNumber = value.replace(/[^\d]+/g,'');
 					actualNumber = actualNumber.replace(/^[0]+([1-9])/,'$1');
