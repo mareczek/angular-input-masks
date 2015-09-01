@@ -849,9 +849,10 @@ if (objectTypes[typeof module]) {
 	var plIdNoPattern = new StringMask('SSS 000000');
 	var plPassportNoPattern = new StringMask('SS 0000000');
 	var plMedicalNoPattern = new StringMask('0000000');
+	var plNurseNoPattern = new StringMask('00 00000S');
 	var plPeselPattern = new StringMask('00000000000');
 	var plNipPattern = new StringMask('000-00-00-000');
-	var plRegonPattern = new StringMask('0000000000000');
+	var plRegonPattern = new StringMask('000000000 00000');
 	var plPostalCodePattern = new StringMask('00-000');
 	var cnpjPattern = new StringMask('00.000.000\/0000-00');
 	var cpfPattern = new StringMask('000.000.000-00');
@@ -1488,7 +1489,7 @@ if (objectTypes[typeof module]) {
 					}
 
 					var actualValue = value.replace(/[^\d]/g, '');
-					if (actualValue.length > 9)
+					if (actualValue.length > 14)
 						actualValue = actualValue.replace(/[\d]$/, '');
 					var formatedValue = applyPlRegonMask(actualValue);
 
@@ -1614,6 +1615,55 @@ if (objectTypes[typeof module]) {
 			}
 		};
 	}
+
+	function uiPlNurseNoMask() {
+		function applyPlNurseNoMask (value) {
+			if(!value) {
+				return value;
+			}
+			return plNurseNoPattern.apply(value).toUpperCase().replace(/[^\da-zA-Z]$/, '');
+		}
+		return {
+			restrict: 'A',
+			require: '^ngModel',
+			link: function (scope, element, attrs, ctrl) {
+
+				ctrl.$formatters.push(applyPlNurseNoMask);
+
+				ctrl.$validators.uiPlNurseNo = function(value) {
+					if (!value)
+						return true;
+
+					var valid = false;
+					if (value){
+						var dig = (''+value).split('');
+						if ((value.length === 8) && (parseInt(dig[0]) < 5) &&
+							((dig[7].toUpperCase() === 'A') || (dig[7].toUpperCase() === 'P')))
+	  	      	valid = true;
+					}
+					return valid;
+				};
+
+				ctrl.$parsers.push(function(value) {
+					if(!value) {
+						return value;
+					}
+
+					var actualValue = value.replace(/[^\da-zA-Z]/, '');
+					if (actualValue.length > 8)
+						actualValue = actualValue.replace(/[\da-zA-Z]$/, '');
+					var formatedValue = applyPlNurseNoMask(actualValue);
+
+					if (ctrl.$viewValue !== formatedValue) {
+						ctrl.$setViewValue(formatedValue);
+						ctrl.$render();
+					}
+					return actualValue;
+				});
+			}
+		};
+	}
+
 	function uiBrCpfCnpjMask() {
 		function applyCpfCnpjMask (value) {
 			if(!value) {
@@ -1868,6 +1918,7 @@ if (objectTypes[typeof module]) {
 	.directive('uiPlNipMask', [uiPlNipMask])
 	.directive('uiPlRegonMask', [uiPlRegonMask])
 	.directive('uiPlMedicalNoMask', [uiPlMedicalNoMask])
+	.directive('uiPlNurseNoMask', [uiPlNurseNoMask])
 	.directive('uiBrCpfMask', [uiBrCpfMask])
 	.directive('uiBrCnpjMask', [uiBrCnpjMask])
 	.directive('uiBrCpfcnpjMask', [uiBrCpfCnpjMask])
