@@ -849,9 +849,10 @@ if (objectTypes[typeof module]) {
 	var plIdNoPattern = new StringMask('SSS 000000');
 	var plPassportNoPattern = new StringMask('SS 0000000');
 	var plMedicalNoPattern = new StringMask('0000000');
+	var plNurseNoPattern = new StringMask('00 00000S');
 	var plPeselPattern = new StringMask('00000000000');
 	var plNipPattern = new StringMask('000-00-00-000');
-	var plRegonPattern = new StringMask('0000000000000');
+	var plRegonPattern = new StringMask('000000000 00000');
 	var plPostalCodePattern = new StringMask('00-000');
 	var cnpjPattern = new StringMask('00.000.000\/0000-00');
 	var cpfPattern = new StringMask('000.000.000-00');
@@ -1138,6 +1139,9 @@ if (objectTypes[typeof module]) {
 				ctrl.$formatters.push(applyPlBankAccountNoMask);
 
 				ctrl.$validators.uiPlBankAccountNo = function(value) {
+					if (!value)
+						return true;
+
 					var valid = false;
 					if (value && value.length === 26) {
 						var tempValue = value;
@@ -1264,6 +1268,7 @@ if (objectTypes[typeof module]) {
 
 				ctrl.$formatters.push(applyPlIdNoMask);
 
+
 				ctrl.$validators.uiPlIdNo = function(value){
 					if (!value)
 						return true;
@@ -1314,6 +1319,9 @@ if (objectTypes[typeof module]) {
 				ctrl.$formatters.push(applyPlPostalCodeMask);
 
 				ctrl.$validators.uiPlPostalCode = function(modelValue) {
+					if (!modelValue)
+						return true;
+
 					if (writeToModelPrematurely)
 						ctrl.$modelValue = modelValue;
 					return !modelValue || modelValue.length === 5;
@@ -1372,6 +1380,7 @@ if (objectTypes[typeof module]) {
 
 				ctrl.$formatters.push(applyPlPeselMask);
 
+
 				ctrl.$validators.uiPlPesel = function(value) {
 					if (!value)
 						return true;
@@ -1422,6 +1431,9 @@ if (objectTypes[typeof module]) {
 				ctrl.$formatters.push(applyPlNipMask);
 
 				ctrl.$validators.uiPlNip = function (modelValue) {
+					if (!modelValue)
+						return true;
+
 					var valid = false;
 					if (modelValue && modelValue.length === 10) {
 						var dig = (''+modelValue).split('');
@@ -1477,7 +1489,7 @@ if (objectTypes[typeof module]) {
 					}
 
 					var actualValue = value.replace(/[^\d]/g, '');
-					if (actualValue.length > 9)
+					if (actualValue.length > 14)
 						actualValue = actualValue.replace(/[\d]$/, '');
 					var formatedValue = applyPlRegonMask(actualValue);
 
@@ -1491,6 +1503,9 @@ if (objectTypes[typeof module]) {
 				ctrl.$formatters.push(applyPlRegonMask);
 
 				ctrl.$validators.uiPlRegon = function(value) {
+					if (!value)
+						return true;
+
 					var valid = false;
 					var dig = null;
 					var controlSum = null;
@@ -1575,6 +1590,9 @@ if (objectTypes[typeof module]) {
 				ctrl.$formatters.push(applyPlMedicalNoMask);
 
 				ctrl.$validators.uiPlMedicalNo = function(value) {
+					if (!value)
+						return true;
+
 					var valid = false;
 					if (value){
 						var dig = (''+value).split('');
@@ -1597,6 +1615,55 @@ if (objectTypes[typeof module]) {
 			}
 		};
 	}
+
+	function uiPlNurseNoMask() {
+		function applyPlNurseNoMask (value) {
+			if(!value) {
+				return value;
+			}
+			return plNurseNoPattern.apply(value).toUpperCase().replace(/[^\da-zA-Z]$/, '');
+		}
+		return {
+			restrict: 'A',
+			require: '^ngModel',
+			link: function (scope, element, attrs, ctrl) {
+
+				ctrl.$formatters.push(applyPlNurseNoMask);
+
+				ctrl.$validators.uiPlNurseNo = function(value) {
+					if (!value)
+						return true;
+
+					var valid = false;
+					if (value){
+						var dig = (''+value).split('');
+						if ((value.length === 8) && (parseInt(dig[0]) < 5) &&
+							((dig[7].toUpperCase() === 'A') || (dig[7].toUpperCase() === 'P')))
+	  	      	valid = true;
+					}
+					return valid;
+				};
+
+				ctrl.$parsers.push(function(value) {
+					if(!value) {
+						return value;
+					}
+
+					var actualValue = value.replace(/[^\da-zA-Z]/, '');
+					if (actualValue.length > 8)
+						actualValue = actualValue.replace(/[\da-zA-Z]$/, '');
+					var formatedValue = applyPlNurseNoMask(actualValue);
+
+					if (ctrl.$viewValue !== formatedValue) {
+						ctrl.$setViewValue(formatedValue);
+						ctrl.$render();
+					}
+					return actualValue;
+				});
+			}
+		};
+	}
+
 	function uiBrCpfCnpjMask() {
 		function applyCpfCnpjMask (value) {
 			if(!value) {
@@ -1851,6 +1918,7 @@ if (objectTypes[typeof module]) {
 	.directive('uiPlNipMask', [uiPlNipMask])
 	.directive('uiPlRegonMask', [uiPlRegonMask])
 	.directive('uiPlMedicalNoMask', [uiPlMedicalNoMask])
+	.directive('uiPlNurseNoMask', [uiPlNurseNoMask])
 	.directive('uiBrCpfMask', [uiBrCpfMask])
 	.directive('uiBrCnpjMask', [uiBrCnpjMask])
 	.directive('uiBrCpfcnpjMask', [uiBrCpfCnpjMask])
@@ -1897,6 +1965,7 @@ if (objectTypes[typeof module]) {
 					if (!value) {
 						return value;
 					}
+
 
 					var actualNumber = value.replace(/[^\d]+/g,'');
 					actualNumber = actualNumber.replace(/^[0]+([1-9])/,'$1');
