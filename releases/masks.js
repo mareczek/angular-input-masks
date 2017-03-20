@@ -1991,7 +1991,7 @@ if (objectTypes[typeof module]) {
         		}
         		if (controlSum % 97 === 1)
 	  	      	valid = true;
-					}
+					} else if ( value == null || value.length === 0 ) { valid = true; }
 					return valid;
 				};
 			}
